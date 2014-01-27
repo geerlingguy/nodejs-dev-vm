@@ -1,0 +1,26 @@
+---
+- hosts: all
+  tasks:
+  - name: Import EPEL and Remi GPG keys.
+    rpm_key: key={{ item }} state=present
+    with_items:
+    - "https://fedoraproject.org/static/0608B895.txt"
+    - "http://rpms.famillecollet.com/RPM-GPG-KEY-remi"
+
+  - name: Install EPEL and Remi repos.
+    command: rpm -Uvh --force {{ item.href }} creates={{ item.creates }}
+    with_items:
+    - {
+      href: "http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm",
+      creates: "/etc/yum.repos.d/epel.repo"
+    }
+    - {
+      href: "http://rpms.famillecollet.com/enterprise/remi-release-6.rpm",
+      creates: "/etc/yum.repos.d/remi.repo"
+    }
+
+  - name: Install Node.js.
+    yum: pkg=npm state=present enablerepo=epel
+
+  - name: Install simple Node.js app on the server.
+    copy: src=app.js dest=/usr/local/src/app.js owner=root group=root mode=0755
