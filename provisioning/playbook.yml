@@ -14,6 +14,7 @@
 - hosts: all
 
   vars:
+    # Vars can also be passed in via CLI with `--extra-vars="name=value"`.
     node_apps_location: /usr/local/opt/node
 
   tasks:
@@ -43,10 +44,11 @@
   - name: "Node: Install Node.js and npm."
     yum: pkg=npm state=present enablerepo=epel
 
-  - name: "Node: Install forever (for running our Node.js app)."
+  - name: "Node: Install forever (to run our Node.js app)."
     npm: name=forever global=yes state=latest
 
-  - name: "Node: Create Node.js folder."
+  # SAMPLE APP #################################################################
+  - name: "Node: Ensure Node.js app folder exists."
     file: path={{ node_apps_location }} state=directory
 
   # For < 100 files, the copy module is adequate. For larger copies, consider
