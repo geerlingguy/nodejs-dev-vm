@@ -45,7 +45,7 @@
     yum: pkg=npm state=present enablerepo=epel
 
   - name: "Node: Install forever (to run our Node.js app)."
-    npm: name=forever global=yes state=latest
+    npm: name=forever global=yes state=present
 
   # SAMPLE APP #################################################################
   - name: "Node: Ensure Node.js app folder exists."
